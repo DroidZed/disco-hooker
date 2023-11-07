@@ -1,0 +1,21 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+python-decouple = "*"
+discord-webhook = {extras = ["async"], version = "*"}
+flask = {extras = ["async"], version = "*"}
+
+[dev-packages]
+pre-commit = "*"
+black = "*"
+pylint = "*"
+isort = {extras = ["pipfile_deprecated_finder"], version = "*"}
+
+[requires]
+python_version = "3.11"
+
+[pipenv]
+allow_prereleases = false
