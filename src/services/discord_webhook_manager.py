@@ -3,6 +3,7 @@ from discord_webhook import (
     AsyncDiscordWebhook,
     DiscordEmbed,
 )
+import redis as rds
 from src.models.result import Result
 from src.models.webhook_response import WebhookResponse
 
@@ -17,10 +18,13 @@ class DiscordWebHookManager(metaclass=Singleton):
 
     def __init__(self) -> None:
         super().__init__()
-        self.last_embed: DiscordEmbed = DiscordEmbed()
-        self.hooks: list[
-            tuple[AsyncDiscordWebhook, str]
-        ] = []
+        self._cache_manager = rds.Redis(
+            host=Env().REDIS_HOST,
+            port=Env().REDIS_PORT,
+            db=0,
+            decode_responses=True,
+        )
+        self.hooks = []
 
     def create_embed(
         self,
@@ -78,6 +82,8 @@ class DiscordWebHookManager(metaclass=Singleton):
         webhook = AsyncDiscordWebhook(url=Env().WEBHOOK_URL)
 
         self.hooks.append((webhook, f"{webhook.id}"))
+
+        self._cache_manager.hse
 
         it_exists = self._get_embed(webhook, title)
 

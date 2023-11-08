@@ -1,0 +1,31 @@
+version: '3.8'
+
+volumes:
+  redis:
+
+
+networks:
+  hooker:
+    driver: bridge
+
+services:
+  redis:
+    image: redis/redis-stack:latest
+    ports:
+      - "6379:6379"
+    networks:
+      - hooker
+    volumes:
+      - redis:/data
+
+  hooked-cobra:
+    depends_on:
+      - redis
+    environment:
+      - PORT=${PORT}
+    image: droidzed/hooked-cobra:latest
+    container_name: slytherine-champagne
+    networks:
+      - hooker
+    ports:
+      - ${PORT}:${PORT}
