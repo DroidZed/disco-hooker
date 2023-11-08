@@ -1,1 +1,1 @@
-from .discord_webhook_manager import DiscordWebHookManager
+from .discord_webhook_manager import *
