@@ -5,27 +5,21 @@ on:
     branches: [ main ]
 
 jobs:
+
   build:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - name: Build the Docker image
-        run: docker build . --file Dockerfile --tag droidzed/disco-hooker:latest
 
-  authenticate:
     runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - name: docker login
-        env:
-          DOCKER_USER: ${{secrets.DOCKER_USER}}
-          DOCKER_PASSWORD: ${{secrets.DOCKER_PASSWORD}}
-        run: |
-          docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
 
-  push-to-hub:
-    runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - name: Docker Push
-        run: docker push droidzed/disco-hooker
+    - uses: actions/checkout@v2
+    - name: docker login
+      env:
+        DOCKER_USER: ${{secrets.DOCKER_USER}}
+        DOCKER_PASSWORD: ${{secrets.DOCKER_PASSWORD}}
+      run: |
+        docker login -u $DOCKER_USER -p $DOCKER_PASSWORD 
+    - name: Build the Docker image
+      run: docker build . --file Dockerfile --tag droided/disco-hooker:$(date +%s)
+      
+    - name: Docker Push
+      run: docker push droidzed/disco-hookertest
