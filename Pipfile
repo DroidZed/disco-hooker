@@ -7,7 +7,7 @@ name = "pypi"
 python-decouple = "*"
 discord-webhook = {extras = ["async"], version = "*"}
 flask = {extras = ["async"], version = "*"}
-
+waitress = "*"
 
 [dev-packages]
 pre-commit = "*"

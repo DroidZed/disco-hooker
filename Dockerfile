@@ -10,5 +10,6 @@ RUN pip3 install -r requirements.txt
 COPY app.py app.py
 COPY src ./src
 
+EXPOSE 6000
 
-CMD [ "python3" , "app.py"]
+ENTRYPOINT ["waitress-serve", "--host", "0.0.0.0", "--port", "6000", "--call", "app:create_app"]

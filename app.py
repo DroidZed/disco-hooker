@@ -3,7 +3,6 @@ from src.config.env import Env
 
 from werkzeug.utils import import_string
 
-Env()
 
 api_blueprints = ["hook_bp"]
 
@@ -18,9 +17,3 @@ def create_app():
         app.register_blueprint(bp)
 
     return app
-
-
-if __name__ == "__main__":
-    app = create_app()
-
-    app.run(port=Env().PORT)
