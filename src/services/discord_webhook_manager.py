@@ -1,11 +1,9 @@
-from typing import Any, Optional
+from typing import Optional
 from discord_webhook import (
     AsyncDiscordWebhook,
     DiscordEmbed,
 )
-import redis as rds
-from src.models.result import Result
-from src.models.webhook_response import WebhookResponse
+from src.models import ErrorResponse
 
 from src.utils.consts import Consts
 from src.utils.singleton import Singleton
@@ -18,13 +16,6 @@ class DiscordWebHookManager(metaclass=Singleton):
 
     def __init__(self) -> None:
         super().__init__()
-        self._cache_manager = rds.Redis(
-            host=Env().REDIS_HOST,
-            port=Env().REDIS_PORT,
-            db=0,
-            decode_responses=True,
-        )
-        self.hooks = []
 
     def create_embed(
         self,
@@ -78,17 +69,8 @@ class DiscordWebHookManager(metaclass=Singleton):
         color: Optional[int] = 0,
         author_name: Optional[str] = "DroidZed",
         footer: Optional[str] = "Get hooked!",
-    ) -> Result:
+    ) -> Optional[ErrorResponse]:
         webhook = AsyncDiscordWebhook(url=Env().WEBHOOK_URL)
-
-        self.hooks.append((webhook, f"{webhook.id}"))
-
-        self._cache_manager.hse
-
-        it_exists = self._get_embed(webhook, title)
-
-        if it_exists is not None:
-            return Result(error="Already defined!")
 
         embed_c = (
             Consts.FAIL_COLOR
@@ -112,58 +94,8 @@ class DiscordWebHookManager(metaclass=Singleton):
         resp = await webhook.execute()
 
         if resp.status_code != 200:
-            return Result(error="Unauthorized")
+            return ErrorResponse(error="Unauthorized")
 
         self.last_embed = _embed
 
-        return Result(
-            data=WebhookResponse(
-                status_code=resp.status_code,
-                webhook_id=f"{webhook.id}",
-            )
-        )
-
-    async def update_channel(
-        self,
-        by_id: str,
-        for_title: str,
-        with_fields: list[dict[str, str]],
-    ) -> Result:
-        webhook = AsyncDiscordWebhook(
-            url=Env().WEBHOOK_URL, id=by_id
-        )
-
-        embed = self._get_embed(webhook, for_title)
-
-        if embed is None:
-            return Result(error="Not found.")
-
-        for field in with_fields:
-            embed.update(field)
-
-        webhook.remove_embeds()
-
-        webhook.add_embed(embed)
-
-        resp = await webhook.edit()
-
-        if resp.status_code != 200:
-            return Result(error="Unauthorized")
-
-        return Result(
-            data=WebhookResponse(
-                status_code=resp.status_code,
-                webhook_id=f"{webhook.id}",
-            )
-        )
-
-    def _get_embed(
-        self, webhook: AsyncDiscordWebhook, title: str
-    ) -> Optional[dict[str, Any]]:
-        return next(
-            filter(
-                lambda e: e["title"] == title,
-                webhook.get_embeds(),
-            ),
-            None,
-        )
+        return None
