@@ -6,6 +6,7 @@
 [![License](https://img.shields.io/github/license/mashape/apistatus.svg)](https://pypi.org/project/leafengine/)
 [![Imports: isort](https://img.shields.io/badge/%20imports-isort-%231674b1?style=flat&labelColor=ef8336)](https://pycqa.github.io/isort/)
 [![linting: pylint](https://img.shields.io/badge/linting-pylint-yellowgreen)](https://github.com/pylint-dev/pylint)
+[![Docker Image CI](https://github.com/DroidZed/disco-hooker/actions/workflows/docker-image.yml/badge.svg)](https://github.com/DroidZed/disco-hooker/actions/workflows/docker-image.yml)
 
 </div>
 
