@@ -26,7 +26,7 @@ class DiscordWebHookManager(metaclass=Singleton):
         footer: str,
         embed_image: Optional[str],
         embed_thumbnail: Optional[str],
-        fields: list[dict[str, str]],
+        fields: Optional[list[dict[str, str]]] = None,
     ) -> DiscordEmbed:
         _embed = DiscordEmbed(
             title=embed_title,
@@ -54,10 +54,13 @@ class DiscordWebHookManager(metaclass=Singleton):
         if embed_thumbnail:
             _embed.set_thumbnail(embed_thumbnail)
 
-        for field in fields:
-            _embed.add_embed_field(
-                field["name"], field["value"], inline=False
-            )
+        if fields:
+            for field in fields:
+                _embed.add_embed_field(
+                    field["name"],
+                    field["value"],
+                    inline=False,
+                )
 
         return _embed
 
@@ -65,7 +68,7 @@ class DiscordWebHookManager(metaclass=Singleton):
         self,
         title: str,
         message: str,
-        fields: list[dict[str, str]],
+        fields: Optional[list[dict[str, str]]] = None,
         color: Optional[int] = 0,
         author_name: Optional[str] = "DroidZed",
         footer: Optional[str] = "Get hooked!",

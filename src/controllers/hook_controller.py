@@ -10,5 +10,7 @@ class HookController(metaclass=Singleton):
             title=body["title"],
             message=body["msg"],
             color=body["status"],
-            fields=body["jobs"],
+            fields=body["jobs"]
+            if "jobs" in body.keys()
+            else None,
         )
