@@ -17,6 +17,8 @@ Thi is a simple Discord Hook notifier backend written in `flask` & `discord-webh
 
 ![Example](/images/example.png)
 
+THIS PROJECT USES PYTHON TYPE HINTING FEATURES SO A VERSION OF PYTHON >= 3.10 IS ADVISED !
+
 ## Usage:
 
 1. Docker image:
